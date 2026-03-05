@@ -2008,7 +2008,7 @@ void UpdateMusicStream(Music music)
     // Check both sub-buffers to check if they require refilling
     for (int i = 0; i < 2; i++)
     {
-        unsigned int framesLeft = music.frameCount - music.stream.buffer->framesProcessed;  // Frames left to be processed
+        unsigned int framesLeft = music.loopEnd - music.stream.buffer->framesProcessed;  // Frames left to be processed
         unsigned int framesToStream = 0;                 // Total frames to be streamed
 
         if ((framesLeft >= subBufferSizeInFrames) || music.looping) framesToStream = subBufferSizeInFrames;
@@ -2046,7 +2046,7 @@ void UpdateMusicStream(Music music)
                         frameCountReadTotal += frameCountRead;
                         frameCountStillNeeded -= frameCountRead;
                         if (frameCountStillNeeded == 0) break;
-                        else drwav_seek_to_first_pcm_frame((drwav *)music.ctxData);
+                        else drwav_seek_to_pcm_frame((drwav *)music.ctxData, music.loopStart);
                     }
                 }
                 else if (music.stream.sampleSize == 32)
@@ -2057,7 +2057,7 @@ void UpdateMusicStream(Music music)
                         frameCountReadTotal += frameCountRead;
                         frameCountStillNeeded -= frameCountRead;
                         if (frameCountStillNeeded == 0) break;
-                        else drwav_seek_to_first_pcm_frame((drwav *)music.ctxData);
+                        else drwav_seek_to_pcm_frame((drwav *)music.ctxData, music.loopStart);
                     }
                 }
             } break;
@@ -2071,7 +2071,7 @@ void UpdateMusicStream(Music music)
                     frameCountReadTotal += frameCountRead;
                     frameCountStillNeeded -= frameCountRead;
                     if (frameCountStillNeeded == 0) break;
-                    else stb_vorbis_seek_start((stb_vorbis *)music.ctxData);
+                    else stb_vorbis_seek((stb_vorbis *)music.ctxData, music.loopStart);
                 }
             } break;
         #endif
