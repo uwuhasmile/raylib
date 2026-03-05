@@ -1456,6 +1456,8 @@ Music LoadMusicStream(const char *fileName)
             music.stream = LoadAudioStream(ctxMp3->sampleRate, 32, ctxMp3->channels);
             music.frameCount = (unsigned int)drmp3_get_pcm_frame_count(ctxMp3);
             music.looping = true;   // Looping enabled by default
+            music.loopStart = 0;
+            music.loopEnd = music.frameCount;
             musicLoaded = true;
         }
         else
@@ -1478,6 +1480,8 @@ Music LoadMusicStream(const char *fileName)
             music.stream = LoadAudioStream(ctxQoa->info.samplerate, 32, ctxQoa->info.channels);
             music.frameCount = ctxQoa->info.samples;
             music.looping = true;   // Looping enabled by default
+            music.loopStart = 0;
+            music.loopEnd = music.frameCount;
             musicLoaded = true;
         }
         else{} //No uninit required
@@ -1497,6 +1501,8 @@ Music LoadMusicStream(const char *fileName)
             music.stream = LoadAudioStream(ctxFlac->sampleRate, sampleSize, ctxFlac->channels);
             music.frameCount = (unsigned int)ctxFlac->totalPCMFrameCount;
             music.looping = true;   // Looping enabled by default
+            music.loopStart = 0;
+            music.loopEnd = music.frameCount;
             musicLoaded = true;
         }
         else
@@ -1525,6 +1531,8 @@ Music LoadMusicStream(const char *fileName)
             music.stream = LoadAudioStream(AUDIO.System.device.sampleRate, bits, AUDIO_DEVICE_CHANNELS);
             music.frameCount = (unsigned int)jar_xm_get_remaining_samples(ctxXm);    // NOTE: Always 2 channels (stereo)
             music.looping = true;   // Looping enabled by default
+            music.loopStart = 0;
+            music.loopEnd = music.frameCount;
             jar_xm_reset(ctxXm);    // Make sure to start at the beginning of the song
             musicLoaded = true;
         }
@@ -1549,6 +1557,8 @@ Music LoadMusicStream(const char *fileName)
             music.stream = LoadAudioStream(AUDIO.System.device.sampleRate, 16, AUDIO_DEVICE_CHANNELS);
             music.frameCount = (unsigned int)jar_mod_max_samples(ctxMod);    // NOTE: Always 2 channels (stereo)
             music.looping = true;   // Looping enabled by default
+            music.loopStart = 0;
+            music.loopEnd = music.frameCount;
             musicLoaded = true;
         }
         else
@@ -1688,6 +1698,8 @@ Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data,
             music.stream = LoadAudioStream(ctxMp3->sampleRate, 32, ctxMp3->channels);
             music.frameCount = (unsigned int)drmp3_get_pcm_frame_count(ctxMp3);
             music.looping = true;   // Looping enabled by default
+            music.loopStart = 0;
+            music.loopEnd = music.frameCount;
             musicLoaded = true;
         }
         else
@@ -1716,6 +1728,8 @@ Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data,
             music.stream = LoadAudioStream(ctxQoa->info.samplerate, 32, ctxQoa->info.channels);
             music.frameCount = ctxQoa->info.samples;
             music.looping = true;   // Looping enabled by default
+            music.loopStart = 0;
+            music.loopEnd = music.frameCount;
             musicLoaded = true;
         }
         else{} //No uninit required
@@ -1735,6 +1749,8 @@ Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data,
             music.stream = LoadAudioStream(ctxFlac->sampleRate, sampleSize, ctxFlac->channels);
             music.frameCount = (unsigned int)ctxFlac->totalPCMFrameCount;
             music.looping = true;   // Looping enabled by default
+            music.loopStart = 0;
+            music.loopEnd = music.frameCount;
             musicLoaded = true;
         }
         else
@@ -1762,6 +1778,8 @@ Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data,
             music.stream = LoadAudioStream(AUDIO.System.device.sampleRate, bits, 2);
             music.frameCount = (unsigned int)jar_xm_get_remaining_samples(ctxXm);    // NOTE: Always 2 channels (stereo)
             music.looping = true;   // Looping enabled by default
+            music.loopStart = 0;
+            music.loopEnd = music.frameCount;
             jar_xm_reset(ctxXm);    // Make sure to start at the beginning of the song
 
             musicLoaded = true;
@@ -1802,6 +1820,8 @@ Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data,
             music.stream = LoadAudioStream(AUDIO.System.device.sampleRate, 16, 2);
             music.frameCount = (unsigned int)jar_mod_max_samples(ctxMod);    // NOTE: Always 2 channels (stereo)
             music.looping = true;   // Looping enabled by default
+            music.loopStart = 0;
+            music.loopEnd = music.frameCount;
             musicLoaded = true;
         }
         else
