@@ -1645,6 +1645,28 @@ Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data,
             // WARNING: It seems this function returns length in frames, not samples, so multiply by channels
             music.frameCount = (unsigned int)stb_vorbis_stream_length_in_samples((stb_vorbis *)music.ctxData);
             music.looping = true;   // Looping enabled by default
+
+                        music.loopStart = 0;
+            music.loopEnd = music.frameCount;
+            bool foundLoopStart = false;
+            bool foundLoopEnd = false;
+            for (int i = 0; i < ctxOgg->comment_list_length; ++i)
+            {
+                if (strncmp(ctxOgg->comment_list[i], "LOOPSTART=", 10) == 0)
+                {
+                    music.loopStart = (unsigned int)atoll(ctxOgg->comment_list[i] + 10);
+                    foundLoopStart = true;
+                }
+                else if (strncmp(ctxOgg->comment_list[i], "LOOPEND=", 8) == 0)
+                {
+                    music.loopEnd = (unsigned int)atoll(ctxOgg->comment_list[i] + 8);
+                    foundLoopEnd = true;
+                }
+
+                if (foundLoopStart && foundLoopEnd)
+                    break;
+            }
+
             musicLoaded = true;
         }
         else
