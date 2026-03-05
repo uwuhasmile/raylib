@@ -1602,6 +1602,22 @@ Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data,
             music.stream = LoadAudioStream(ctxWav->sampleRate, sampleSize, ctxWav->channels);
             music.frameCount = (unsigned int)ctxWav->totalPCMFrameCount;
             music.looping = true;   // Looping enabled by default
+
+            music.loopStart = 0;
+            music.loopEnd = music.frameCount;
+            for (drwav_uint32 i = 0; i < ctxWav->metadataCount; ++i)
+            {
+                drwav_metadata* pMetadata = &ctxWav->pMetadata[i];
+
+                if (pMetadata->type == drwav_metadata_type_smpl && pMetadata->data.smpl.sampleLoopCount > 0)
+                {
+                    music.loopStart = pMetadata->data.smpl.pLoops[0].firstSampleOffset;
+                    music.loopEnd = pMetadata->data.smpl.pLoops[0].lastSampleOffset;
+
+                    break;
+                }
+            }
+
             musicLoaded = true;
         }
         else
